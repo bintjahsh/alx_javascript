@@ -1,5 +1,7 @@
 function callMeMoby (x, theFunction) {
-    return x * theFunction;
+    for (let i = 0; i < x; i++) {
+        theFunction();
+    }
 }
 
 module.exports = {
