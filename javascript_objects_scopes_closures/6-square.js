@@ -1,6 +1,6 @@
 #!/usr/bin/node
-const Square = require('./5-square');
-class Square extends Square {
+const superSquare = require('./5-square');
+class Square extends superSquare {
     charPrint(c) {
         for (let i = 0; i < this.size; i++) {
             let square_print = '';
