@@ -1,7 +1,7 @@
 const request = require('request')
 
 const url = process.argv[2]
-const id = "http://swapi.co/api/people/18/"
+const id = "18"
 
 request(url, function(error, response, body) {
     let count = 0
@@ -9,7 +9,7 @@ request(url, function(error, response, body) {
         const responseJSON = JSON.parse(response.body);
         const results = responseJSON.results
         results.forEach(film => {
-            const wedgeAntilles = film.characters.filter((character) => character == id)
+            const wedgeAntilles = film.characters.filter((character) => character.includes(id))
             count += wedgeAntilles.length
         });
     }
