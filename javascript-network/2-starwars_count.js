@@ -1,7 +1,7 @@
 const request = require('request')
 
 const url = process.argv[2]
-const id = "https://swapi-api.alx-tools.com/api/people/18/"
+const id = "http://swapi.co/api/people/18/"
 
 request(url, function(error, response, body) {
     let count = 0
