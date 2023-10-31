@@ -1,6 +1,8 @@
 const request = require('request');
 
-url = argv[1]
-request(url, function(response) {
-    console.log('code:', response.statusCode);
+url = process.argv[2]
+request(url, function(error, response, body) {
+    if (response) {
+        console.log('code:',response.statusCode);
+    }
 })
