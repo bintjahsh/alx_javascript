@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Web Store</title>
+    <script>
+      if (typeof Storage !== "undefined") {
+        const availableItems = ["Shampoo", "Soap", "Sponge", "Water"];
+        window.addEventListener("DOMContentLoaded", () => {
+          createStore();
+          displayCart();
+        });
+
+        function setCartinStorage(cart) {
+          sessionStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function getCartFromStorage() {
+          /* Returns content of the cart stored in session storage.
+            If cart is empty, returns an empty object
+          */
+          const cart = sessionStorage.getItem("cart");
+          if (cart) {
+            const currentCart = JSON.parse(cart);
+            return currentCart;
+          } else {
+            return {};
+          }
+        }
+
+        function addItemToCart(item) {
+          /* Adds item to cart object, indicating number of times
+            item is added to cart. It stores the value of the cart
+            object in a string for session storage. It calls the function
+            displayCart.
+          */
+          const currentCart = getCartFromStorage();
+          if (currentCart[item]) {
+            currentCart[item]++;
+          } else {
+            currentCart[item] = 1;
+          }
+          setCartinStorage(currentCart);
+          displayCart();
+        }
+
+        function removeItemfromCart(item) {
+          /* Removes item from cart object. It stores the value of the cart
+            object in a string for session storage. It calls the function
+            displayCart.
+          */
+          const currentCart = getCartFromStorage();
+          delete currentCart[item];
+          setCartinStorage(currentCart);
+          displayCart();
+        }
+
+        function clearCart() {
+          /* Clears the entire session storage and calls the function displayCart
+           */
+          sessionStorage.clear();
+          displayCart();
+        }
+
+        function createStore() {
+          /* Creates and adds a h2 of Available products: It adds a list containing
+            every item available for purchase. When the user click on an item, it
+            is added to the cart
+          */
+          const availableHeading = document.createElement("h2");
+          availableHeading.innerHTML = "Available products:";
+          const productsList = document.createElement("ul");
+
+          for (let i = 0; i < availableItems.length; i++) {
+            const listItem = document.createElement("li");
+            const listLink = document.createElement("a");
+            listLink.href = "#";
+            listLink.innerHTML = availableItems[i];
+            listLink.addEventListener("click", () => {
+              addItemToCart(availableItems[i]);
+              displayCart();
+            });
+            listItem.appendChild(listLink);
+            productsList.appendChild(listItem);
+          }
+          document.body.appendChild(availableHeading);
+          document.body.appendChild(productsList);
+        }
+
+        function displayCart() {
+          /* Adds an empty div tag, adds a h2 tag with the text Your cart:
+            If the div tag already exist, it removes any list child. It calls the
+            function updateCart
+          */
+          const cartDiv = document.createElement("div");
+          cartDiv.id = "displayCart";
+          const currentDiv = document.getElementById("displayCart");
+          if (currentDiv) {
+            const list = currentDiv.querySelector("ul");
+            list.remove();
+          }
+          if (!document.getElementById("cartHeading")) {
+            const cartHeading = document.createElement("h2");
+            cartHeading.innerHTML = "Your cart:";
+            cartHeading.id = "cartHeading";
+            document.body.appendChild(cartHeading);
+            document.body.appendChild(cartDiv);
+          }
+          updateCart();
+        }
+
+        function updateCart() {
+          /* Adds a list to the div tag created previously. If the cart is empty,
+            it adds an item Your cart is empty. If the cart is not empty, it
+            adds the list of items within the cart plus (remove) link. When the user clicks on remove,
+            it calls the function removeItemfromCart. It adds an item <Clear my cart>
+            to top of the cart. When the user clicks on it, it calls the function clearCart
+          */
+          const cart = getCartFromStorage();
+          const currentDiv = document.getElementById("displayCart");
+          const cartList = document.createElement("ul");
+          const cartKeys = Object.keys(cart);
+
+          if (cartKeys.length > 0) {
+            const clearList = document.createElement("a");
+            clearList.href = "#";
+            clearList.innerHTML = "Clear my cart";
+            clearList.addEventListener("click", () => {
+              clearCart();
+            });
+            cartList.appendChild(clearList);
+            for (let i = 0; i < cartKeys.length; i++) {
+              const currentKey = cartKeys[i];
+              const currentKeyValue = cart[currentKey];
+              const cartListItem = document.createElement("li");
+              const removeLink = document.createElement("a");
+              removeLink.href = "#";
+              removeLink.innerHTML = "(remove)";
+              removeLink.addEventListener("click", () => {
+                removeItemfromCart(currentKey);
+              });
+              cartListItem.innerHTML = `${currentKey} x ${currentKeyValue}`;
+              cartListItem.appendChild(removeLink);
+              cartList.appendChild(cartListItem);
+            }
+            currentDiv.appendChild(cartList);
+          } else {
+            const cartListItem = document.createElement("li");
+            cartListItem.innerHTML = "Your cart is empty";
+            cartList.appendChild(cartListItem);
+            currentDiv.appendChild(cartList);
+          }
+          document.body.appendChild(currentDiv);
+        }
+      } else {
+        alert(
+          "Sorry, your browser does not support Web storage. Try again with a better one"
+        );
+      }
+    </script>
+  </head>
+  <body></body>
+</html>

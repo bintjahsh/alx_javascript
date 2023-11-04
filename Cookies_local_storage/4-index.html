@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script>
+      let setBtn;
+      let showBtn;
+      let firstname;
+      let email;
+      let loginForm;
+
+      window.addEventListener("DOMContentLoaded", () => {
+        setBtn = document.getElementById("setCookies");
+        firstname = document.getElementById("firstname");
+        email = document.getElementById("email");
+        loginForm = document.getElementById("loginForm");
+        setBtn.addEventListener("click", () => {
+          setCookiesAndShowWelcomeMessage();
+        });
+        showWelcomeMessageOrForm();
+      });
+
+      function setCookiesAndShowWelcomeMessage() {
+        Cookies.set(
+          "firstname",
+          `${firstname.value}`,
+          { path: "" },
+          { expires: 10 }
+        );
+        Cookies.set("email", `${email.value}`, { path: "" }, { expires: 10 });
+        showWelcomeMessageOrForm();
+      }
+
+      function getCookie(name) {
+        if (name) {
+          return Cookies.get(name);
+        }
+        return "";
+      }
+
+      function deleteCookiesAndShowForm() {
+        Cookies.remove("firstname", { path: "" });
+        Cookies.remove("email", { path: "" });
+        showForm();
+      }
+
+      function showForm() {
+        const welcomeMessage = document.getElementById("welcomeMessage");
+        if (welcomeMessage) {
+          welcomeMessage.style.display = "none";
+        }
+        loginForm.style.display = "block";
+      }
+
+      function hideForm() {
+        loginForm.style.display = "none";
+      }
+
+      function showWelcomeMessageOrForm() {
+        const user = Cookies.get("firstname");
+        if (user !== "") {
+          hideForm();
+          const welcome = document.getElementById("welcomeMessage");
+          welcome.innerHTML = `Welcome: ${user} (<a href="#" onclick="deleteCookiesAndShowForm()">logout</a>)`;
+          welcome.style.fontWeight = "normal";
+          welcome.style.fontStyle = "italic";
+          welcome.style.position = "relative";
+          welcome.style.marginLeft = "10px";
+          welcome.style.display = "block";
+          document.body.appendChild(welcome);
+        } else {
+          showForm();
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="loginForm" style="display: none">
+      <h2 style="font-size: 36px">Login to the website</h2>
+      <form action="">
+        <input type="text" id="firstname" placeholder="Firstname" />
+        <input type="text" id="email" placeholder="Email" />
+        <button id="setCookies">Log me in</button>
+      </form>
+      <h1 id="welcomeMessage" style="display: none"></h1>
+    </div>
+  </body>
+</html>

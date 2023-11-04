@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Store</title>
+    <script>
+      if (typeof Storage !== "undefined") {
+        const availableItems = ["Shampoo", "Soap", "Sponge", "Water"];
+        window.addEventListener("DOMContentLoaded", () => {
+          createStore();
+          displayCart();
+        });
+
+        function addItemToCart(item) {
+          /*
+        adds selected items to session storage using a key <item name>,
+        and value is set to true e.g
+        ("soap","true")
+        */
+          sessionStorage.setItem(item, true);
+        }
+
+        function createStore() {
+          const storeList = document.createElement("ul");
+          document.body.appendChild(storeList);
+          for (let i = 0; i < availableItems.length; i++) {
+            const listItem = document.createElement("li");
+            const listLink = document.createElement("a", {});
+            listLink.innerHTML = availableItems[i];
+            listLink.href = "#";
+            storeList.appendChild(listItem);
+            listLink.addEventListener("click", () => {
+              addItemToCart(availableItems[i]);
+              displayCart();
+            });
+            listItem.appendChild(listLink);
+          }
+        }
+
+        function displayCart() {
+          if (sessionStorage.length > 1) {
+            if (!document.getElementById("displayCart")) {
+              const cartStatus = document.createElement("p");
+              cartStatus.id = "displayCart";
+              cartStatus.innerHTML = `You previously had ${
+                sessionStorage.length - 1
+              } items in your cart`;
+              document.body.appendChild(cartStatus);
+            } else {
+              const cartStatus = document.getElementById("displayCart");
+              cartStatus.innerHTML = `You previously had ${sessionStorage.length} items in your cart`;
+            }
+          }
+        }
+      } else {
+        alert(
+          "Sorry, your browser does not support Web storage. Try again with a better one"
+        );
+      }
+    </script>
+  </head>
+  <body></body>
+</html>
