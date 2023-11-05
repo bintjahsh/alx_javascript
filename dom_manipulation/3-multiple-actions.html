@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Creating and Removing Elements</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      const container = document.getElementById("container");
+      const newPara = document.createElement("p");
+      newPara.innerHTML = "New paragraph";
+      newPara.style.display = "block";
+      container.appendChild(newPara);
+      const Btn = document.createElement("button");
+      Btn.innerHTML = "Hide Paragraph";
+      Btn.addEventListener("click", () => {
+        if (newPara.style.display === "none") {
+          newPara.style.display = "block";
+          Btn.innerHTML = "Hide Paragraph";
+        } else {
+          newPara.style.display = "none";
+          Btn.innerHTML = "Show Paragraph";
+        }
+      });
+      container.appendChild(Btn);
+    </script>
+  </body>
+</html>
